@@ -1,0 +1,112 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+int x1 = 0;
+typedef struct node
+{
+    char a[100];
+    int top;
+}node;
+node *p;
+void pushstack(char a)
+{
+    (p->top)++;
+    p->a[p->top] = a;
+}
+char stacktop()
+{
+
+    return p->a[p->top];
+}
+void popdate()
+{
+    (p->top)--;
+}
+void Turnlist(char *a,int len,char *b)
+{
+    int i = 0;
+    char ch;
+    for(i;i<len;i++)
+    {
+        ch = a[i];
+        switch(ch)
+        {
+            case '(':
+            case '{':
+            case '[':
+            {
+                pushstack(ch);
+                break;
+            }
+            case ')':
+            case ']':
+            case '}':
+            {
+                b[x1++] = stacktop();
+                popdate();
+                popdate();
+                break;
+            }
+            case '+':
+            case '-':
+            {
+                if(stacktop() == '+' || stacktop() == '-' || stacktop() == '*' || stacktop() == '/')
+                {
+                    b[x1++] = stacktop();
+                    popdate();
+                }
+                pushstack(ch);
+                break;
+            }
+            case '*':
+            case '/':
+            {
+                if(stacktop() == '+' || stacktop() == '-')
+                {
+                    pushstack(ch);
+                    i = i+1;
+                    b[x1++] = a[i];
+                    b[x1++] = stacktop();
+                    popdate();
+                    break;
+
+                }
+                if(stacktop() == '*' || stacktop() == '/')
+                {
+                    b[x1++] = stacktop();
+                    popdate();
+                    pushstack(ch);
+                    break;
+                }
+                pushstack(ch);
+                break;
+            }
+            default:
+            {
+                b[x1++] = ch;
+                break;
+            }
+        }
+    }
+    b[x1] = stacktop();
+}
+void dateinite()
+{
+    p->top = -1;
+}
+int main()
+{
+    int i;
+    char a[100];
+    char b[100];
+    p = (struct node *)malloc(sizeof(struct node));
+    dateinite();
+    gets(a);
+    Turnlist(a,strlen(a),b);
+    for(i = 0; i < strlen(b); i++)
+    {
+        printf("%c",b[i]);
+    }
+    free(p);
+    return 0;
+}
